@@ -32,7 +32,7 @@ public class GameController : MonoBehaviour
     [HideInInspector] public int[] playerPoint = new int[2];
 
     //Card Ids of each player
-    private List<Card>[] playerHand = new List<Card>[2];
+    [HideInInspector] public List<Card>[] playerHand = new List<Card>[2];
 
     //Current turn selected card
     private Card?[] selectedCard = new Card[2]; 
