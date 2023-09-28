@@ -11,18 +11,16 @@ public class CardUnit : MonoBehaviour
     public Image background;
     public Image image;
     public Image type;
-    public int handId;
 
     public int canvasId;
     public bool selected;
 
-    public void SetCardUnit(string title, string text, Sprite background, Sprite image, Sprite type, int handId){
+    public void SetCardUnit(string title, string text, Sprite background, Sprite image, Sprite type){
         this.title.text = title;
         this.text.text = text;
         this.background.sprite = background;
         this.image.sprite = image;
         this.type.sprite = type;
-        this.handId = handId;
     }
 
     public void SetSelected(){
