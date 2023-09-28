@@ -26,7 +26,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private SO_Card cardData;
     //Deck for both players
     private List<Card>[] deck = new List<Card>[2];
-    [HideInInspector] public State state = State.awaiting;
+    /*[HideInInspector]*/ public State state = State.awaiting;
 
     //Player Points, to increase each round and check if the player reached tree
     [HideInInspector] public int[] playerPoint = new int[2];
@@ -36,6 +36,7 @@ public class GameController : MonoBehaviour
 
     //Current turn selected card
     [HideInInspector] public Card[] selectedCard = new Card[2]; 
+    private bool[] cardSelected = new bool[2];
     private Player winner = Player.none;
 
 
@@ -59,6 +60,8 @@ public class GameController : MonoBehaviour
 
         //Setting the cards according SO
         ResetDecks();
+        //Reseting Selected Cards Array
+        ResetSelectedCards();
         //Reseting Points
         playerPoint = new int[2]{0,0};
         
@@ -147,17 +150,33 @@ public class GameController : MonoBehaviour
             Debug.Log($"Invalid hand card Id {handCardId} {playerHand[playerId].Count}");
             return;
         }
-
+        
         //Get card info to selected card and remove from hand
         selectedCard[playerId] = playerHand[playerId][handCardId];
         selectedCard[playerId].handCardId = handCardId;
-
+        cardSelected[playerId] = true;
+        
         lastType[playerId] = (int)selectedCard[playerId].type;
 
+        CheckEndTurn();
+
+        //Last Function Action
         if(!isMultiplayer && playerId == 0){
             Call_IA();
         }
 
+    }
+
+    void CheckEndTurn(){
+        if(cardSelected[0] && cardSelected[1]){
+            Debug.Log("Starting Round Battle");
+            if(GameEvents.Singleton != null){
+                GameEvents.Singleton.BattlingStart();
+            }
+            else{
+                Debug.Log("There's no event handler to start battle");
+            }
+        }
     }
 
     int GetTurnPointOwner(){
@@ -190,6 +209,8 @@ public class GameController : MonoBehaviour
     public void ResetSelectedCards(){
         selectedCard[0] = null;
         selectedCard[1] = null;
+        cardSelected[0] = false;
+        cardSelected[1] = false;
     }
 
     void Call_IA(){
@@ -203,6 +224,7 @@ public class GameController : MonoBehaviour
     public void FinishRound(){
 
         int pointOwner = GetTurnPointOwner();
+        Debug.Log($"Player {pointOwner} wins this round");
 
         //Checking tied turn
         if(pointOwner != 0 && pointOwner != 1){
@@ -219,6 +241,7 @@ public class GameController : MonoBehaviour
 
     public void FinishGame(int winnerId){
         winner = winnerId == 0 ? Player.playerOne : Player.playerTwo;
+        Debug.Log($"Player {winnerId} wins");
     }
 
 }

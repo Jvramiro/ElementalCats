@@ -30,6 +30,7 @@ public class CheckBattleController : MonoBehaviour
             cardUnits[i].background.sprite = cardTemplate.CardTemplates.FirstOrDefault(t => t.type == updatedCard.type).cardTemplate ?? null;
             cardUnits[i].type.sprite = cardTemplate.CardTemplates.FirstOrDefault(t => t.type == updatedCard.type).cardIcon ?? null;
         }
+        PlayAnimation();
     }
 
     public void PlayAnimation(){

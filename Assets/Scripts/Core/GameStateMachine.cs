@@ -19,11 +19,13 @@ public class GameStateMachine : MonoBehaviour
 
     //Event Handlers
     void OnEnable(){
-        GameObject.FindObjectOfType<GameEvents>().BattlingStart += BattingTurnStart;
+        GameObject.FindObjectOfType<GameEvents>().BattlingStart += CallBattleState;
     }
-
     void OnDisable(){
-        GameEvents.Singleton.BattlingStart -= BattingTurnStart;
+        GameEvents.Singleton.BattlingStart -= CallBattleState;
+    }
+    void CallBattleState(){
+        UpdateState(State.battling);
     }
 
     //Update State and check if it's a state transiftion
