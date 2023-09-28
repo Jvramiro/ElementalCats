@@ -113,18 +113,4 @@ public class VisualController : MonoBehaviour
         cardTooltip.ResetTooltipCardUI();
     }
 
-    public Vector2 points;
-    public List<Card> playerCards, rivalCards;
-    void Update(){
-        points = new Vector2(gameController.playerPoint[0], gameController.playerPoint[1]);
-        playerCards = gameController.playerHand[0];
-        rivalCards = gameController.playerHand[1];
-
-        if(Input.GetKeyDown(KeyCode.G)){
-            foreach(var current in playerHand){
-                Debug.Log(current.title);
-            }
-        }
-    }
-
 }
