@@ -23,7 +23,8 @@ public class VisualController : MonoBehaviour
 
     [SerializeField] private Animator animator;
     [SerializeField] private CardUnit[] cardsUI = new CardUnit[5];
-    [SerializeField] private CardUnit cardTooltip;
+    [SerializeField] private CardTooltipController cardTooltip;
+    [SerializeField] private CheckBattleController checkBattle;
     private GameController gameController;
     private List<Card> playerHand;
     private int mouseSelection = 0;
@@ -35,6 +36,9 @@ public class VisualController : MonoBehaviour
     [HideInInspector] public int playerId;
 
     void Start(){
+        Invoke(nameof(StartFront), 0.5f);
+    }
+    void StartFront(){
         //Get GameController reference
         try{
             gameController = GameController.Singleton;
@@ -46,9 +50,14 @@ public class VisualController : MonoBehaviour
         playerHand = gameController.playerHand[0].ToList();
         UpdateCardsUI();
 
+        //Start Hand
+        animator.Play("HandStart");
+
     }
 
     void FixedUpdate(){
+        if(playerHand == null){ return; }
+
         CheckMouseSelection();
         CheckHandUpdate();
     }
@@ -103,19 +112,12 @@ public class VisualController : MonoBehaviour
     public void UpdateTooltipCardUI(){
         var getCard = cardsUI.FirstOrDefault(c => c.selected);
         if(getCard != null){
-            cardTooltip.title.text = getCard.title.text;
-            cardTooltip.text.text = getCard.text.text;
-            cardTooltip.image.sprite = getCard.image.sprite;
-            cardTooltip.background.sprite = getCard.background.sprite;
-            cardTooltip.type.sprite = getCard.type.sprite;
-            cardTooltip.GetComponent<Animator>().Play("TooltipCardStart");
+            cardTooltip.UpdateTooltipCardUI(getCard);
         }
     }
 
     public void ResetTooltipCardUI(){
-        if(cardTooltip.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("TooltipCardStart")){
-            cardTooltip.GetComponent<Animator>().Play("TooltipCardEnd");
-        }
+        cardTooltip.ResetTooltipCardUI();
     }
 
 }
