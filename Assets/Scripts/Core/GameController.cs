@@ -221,18 +221,23 @@ public class GameController : MonoBehaviour
     public void FinishRound(){
 
         int pointOwner = GetTurnPointOwner();
-        Debug.Log($"Player {pointOwner} wins this round");
-
+        ResetSelectedCards();
+        
         //Checking tied turn
         if(pointOwner != 0 && pointOwner != 1){
             return;
         }
 
+        Debug.Log($"Player {pointOwner} wins this round");
+
         playerPoint[pointOwner, lastType[pointOwner]]++;
+
+        if(GameEvents.Singleton != null){ GameEvents.Singleton.UpdatePoints(); }
 
         if(!isMultiplayer){
             gameAI.RoundHandler(pointOwner, lastType[0], lastType[1]);
         }
+
 
     }
 

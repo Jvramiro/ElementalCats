@@ -18,6 +18,9 @@ public class CardEvents : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void OnPointerDown(PointerEventData eventData) {
         if(eventData.pointerId == -1) {
+
+            if(GameController.Singleton.state != State.playersTurn){ return; }
+            
             cardUnit.selected = false;
             VisualController.Singleton.ResetTooltipCardUI();
             VisualController.Singleton.UpdateHand(cardUnit.canvasId);

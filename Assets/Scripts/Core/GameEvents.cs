@@ -18,5 +18,5 @@ public class GameEvents : MonoBehaviour
     #endregion
 
     public delegate void VoidEvent();
-    public VoidEvent StartGame, BattlingStart, FinishGame;
+    public VoidEvent StartGame, BattlingStart, UpdatePoints, FinishGame;
 }

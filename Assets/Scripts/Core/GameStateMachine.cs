@@ -83,7 +83,6 @@ public class GameStateMachine : MonoBehaviour
 
     void BattingState_End(){
         gameController.FinishRound();
-        gameController.ResetSelectedCards();
 
         //Call the function that check if the game is finished
         gameController.CheckFinishGame();
