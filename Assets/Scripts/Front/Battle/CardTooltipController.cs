@@ -10,6 +10,7 @@ public class CardTooltipController : MonoBehaviour
     public void UpdateTooltipCardUI(CardUnit updatedCard){
         cardUnit.title.text = updatedCard.title.text;
         cardUnit.text.text = updatedCard.text.text;
+        cardUnit.value.text = updatedCard.value.text;
         cardUnit.image.sprite = updatedCard.image.sprite;
         cardUnit.background.sprite = updatedCard.background.sprite;
         cardUnit.type.sprite = updatedCard.type.sprite;

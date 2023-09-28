@@ -26,6 +26,7 @@ public class CheckBattleController : MonoBehaviour
             var updatedCard = getCards[i];
             cardUnits[i].title.text = updatedCard.title;
             cardUnits[i].text.text = updatedCard.text;
+            cardUnits[i].value.text = updatedCard.value.ToString();
             cardUnits[i].image.sprite = updatedCard.image;
             cardUnits[i].background.sprite = cardTemplate.CardTemplates.FirstOrDefault(t => t.type == updatedCard.type).cardTemplate ?? null;
             cardUnits[i].type.sprite = cardTemplate.CardTemplates.FirstOrDefault(t => t.type == updatedCard.type).cardIcon ?? null;

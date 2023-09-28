@@ -90,6 +90,7 @@ public class VisualController : MonoBehaviour
 
                 cardsUI[i].title.text = getCards[i].title;
                 cardsUI[i].text.text = getCards[i].text;
+                cardsUI[i].value.text = getCards[i].value.ToString();
                 cardsUI[i].image.sprite = getCards[i].image;
 
                 cardsUI[i].background.sprite = cardTemplate.CardTemplates.FirstOrDefault(t => t.type == getCards[i].type).cardTemplate ?? null;
