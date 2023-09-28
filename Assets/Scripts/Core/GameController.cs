@@ -154,7 +154,7 @@ public class GameController : MonoBehaviour
 
         lastType[playerId] = (int)selectedCard[playerId].type;
 
-        if(!isMultiplayer){
+        if(!isMultiplayer && playerId == 0){
             Call_IA();
         }
 
