@@ -23,6 +23,7 @@ public class VisualController : MonoBehaviour
 
     [SerializeField] private Animator animator;
     [SerializeField] private CardUnit[] cardsUI = new CardUnit[5];
+    [SerializeField] private CardUnit cardTooltip;
     private GameController gameController;
     private List<Card> playerHand;
     private int mouseSelection = 0;
@@ -39,7 +40,9 @@ public class VisualController : MonoBehaviour
         }
 
         //Initializing the playerHand
-        playerHand = new List<Card>(){ new Card(), new Card(), new Card(), new Card(), new Card() };
+        playerHand = gameController.playerHand[0].ToList();
+        UpdateCardsUI();
+
     }
 
     void FixedUpdate(){
@@ -63,7 +66,7 @@ public class VisualController : MonoBehaviour
     }
 
     void UpdateHand(){
-        if(animator.GetCurrentAnimatorStateInfo(0).IsTag("HandUpdate")){ return; }
+        if(animator.GetCurrentAnimatorStateInfo(0).IsTag("HandUpdate") || animator.GetCurrentAnimatorStateInfo(0).IsName("HandStart")){ return; }
 
         for(int i = 0; i < playerHand.Count; i++){
             if(playerHand[i] != gameController.playerHand[0][i]){
@@ -75,7 +78,7 @@ public class VisualController : MonoBehaviour
     }
 
     public void UpdateCardsUI(){
-        Debug.Log("Update");
+
         for(int i = 0; i < cardsUI.Length; i++){
             if(i <= playerHand.Count){
 
@@ -91,6 +94,24 @@ public class VisualController : MonoBehaviour
                                             playerHand[i].type == CardType.water ? iconWater : null;
 
             }
+        }
+    }
+
+    public void UpdateTooltipCardUI(){
+        var getCard = cardsUI.FirstOrDefault(c => c.selected);
+        if(getCard != null){
+            cardTooltip.title.text = getCard.title.text;
+            cardTooltip.text.text = getCard.text.text;
+            cardTooltip.image.sprite = getCard.image.sprite;
+            cardTooltip.background.sprite = getCard.background.sprite;
+            cardTooltip.type.sprite = getCard.type.sprite;
+            cardTooltip.GetComponent<Animator>().Play("TooltipCardStart");
+        }
+    }
+
+    public void ResetTooltipCardUI(){
+        if(cardTooltip.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("TooltipCardStart")){
+            cardTooltip.GetComponent<Animator>().Play("TooltipCardEnd");
         }
     }
 

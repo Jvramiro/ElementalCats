@@ -171,7 +171,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 500}
+  m_SizeDelta: {x: 380, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5731633942387567141
 CanvasRenderer:
@@ -270,7 +270,6 @@ MonoBehaviour:
   background: {fileID: 5145363286149093454}
   image: {fileID: 5613192374098869713}
   type: {fileID: 730154088535417963}
-  handId: 0
   canvasId: 0
   selected: 0
 --- !u!1 &2776137493321683104

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class CardUnit : MonoBehaviour
 {
@@ -23,10 +24,4 @@ public class CardUnit : MonoBehaviour
         this.type.sprite = type;
     }
 
-    public void SetSelected(){
-        selected = true;
-    }
-    public void SetUnselected(){
-        selected = false;
-    }
 }
