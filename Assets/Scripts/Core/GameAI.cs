@@ -4,7 +4,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class GameAI : MonoBehaviour
+public class GameAI : MonoBehaviour, IGameAI
 {
     public List<int> playerTypeHistory = new List<int>();
 
@@ -71,7 +71,7 @@ public class GameAI : MonoBehaviour
 
     }
 
-    void AI_Input(int handCardId){
+    public void AI_Input(int handCardId){
         GameController.Singleton.PlayerAction(1, handCardId);
     }
 
@@ -82,4 +82,5 @@ public class GameAI : MonoBehaviour
     int GetEffectiveness(int typeId){
         return typeId == 0 ? 1 : typeId == 2 ? 0 : 0;
     }
+
 }

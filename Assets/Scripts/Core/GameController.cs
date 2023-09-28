@@ -40,7 +40,7 @@ public class GameController : MonoBehaviour
 
 
     //Offline and Multiplayer region
-    private GameAI gameAI = new GameAI();
+    private IGameAI gameAI = new GameAI();
     private bool isMultiplayer = false;
     private int[] lastType = new int[2]{ -1, -1 };
 
