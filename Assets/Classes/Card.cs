@@ -8,5 +8,6 @@ public class Card {
     public int value;
     public CardType type;
     public Sprite image;
+    public int handCardId;
 
 }

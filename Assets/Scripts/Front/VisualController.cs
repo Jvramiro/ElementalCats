@@ -31,6 +31,9 @@ public class VisualController : MonoBehaviour
     [SerializeField] private Sprite backgroundFire, backgroundIce, backgroundWater, backgroundNone;
     [SerializeField] private Sprite iconFire, iconIce, iconWater;
 
+    //Player identifier, 0 or 1
+    [HideInInspector] public int playerId;
+
     void Start(){
         //Get GameController reference
         try{
@@ -68,7 +71,7 @@ public class VisualController : MonoBehaviour
     void UpdateHand(){
         if(animator.GetCurrentAnimatorStateInfo(0).IsTag("HandUpdate") || animator.GetCurrentAnimatorStateInfo(0).IsName("HandStart")){ return; }
 
-        for(int i = 0; i < playerHand.Count; i++){
+        for(int i = 0; i < gameController.playerHand.Count(); i++){
             if(playerHand[i] != gameController.playerHand[0][i]){
                 animator.Play($"HandUpdate_0{i}");
                 playerHand[i] = gameController.playerHand[0][i];

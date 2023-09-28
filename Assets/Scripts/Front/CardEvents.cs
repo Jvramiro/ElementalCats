@@ -18,7 +18,9 @@ public class CardEvents : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void OnPointerDown(PointerEventData eventData) {
         if(eventData.pointerId == -1) {
-
+            cardUnit.selected = false;
+            VisualController.Singleton.ResetTooltipCardUI();
+            PlayerInputHandler.Singleton.Input_SelectCard(cardUnit.canvasId);
         }
         else if(eventData.pointerId == -2) {
             VisualController.Singleton.UpdateTooltipCardUI();

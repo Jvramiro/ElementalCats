@@ -45,6 +45,7 @@ public class GameStateMachine : MonoBehaviour
 
     void BattingTurnStart(){
         //Invoke the end of this state after specified time
+        gameController.RemoveSelectedCards();
         Invoke(nameof(BattingTurnEnd), gameController.idleGameTime);
     }
 

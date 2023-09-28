@@ -108,12 +108,18 @@ public class GameController : MonoBehaviour
 
     }
 
+    public void RemoveSelectedCards(){
+        // --------> To improve later
+        playerHand[0].RemoveAt(selectedCard[0].handCardId);
+        playerHand[1].RemoveAt(selectedCard[1].handCardId);
+    }
+
     public void PlayersDrawCards(){
         AddCard(0);
         AddCard(1);
     }
 
-    void PlayerAction(int playerId, int handCardId){
+    public void PlayerAction(int playerId, int handCardId){
 
         //Check if it's a correct player Id
         if(playerId != 0 && playerId != 1){
@@ -127,9 +133,15 @@ public class GameController : MonoBehaviour
             return;
         }
 
+        //Check if it's a avaiable hand card Id
+        if(handCardId < 0 || handCardId >= playerHand[playerId].Count){
+            Debug.Log($"Invalid hand card Id {handCardId} {playerHand[playerId].Count}");
+            return;
+        }
+
         //Get card info to selected card and remove from hand
         selectedCard[playerId] = playerHand[playerId][handCardId];
-        RemoveCard(playerId, handCardId);
+        selectedCard[playerId].handCardId = handCardId;
 
     }
 
