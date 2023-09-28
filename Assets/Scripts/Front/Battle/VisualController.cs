@@ -24,21 +24,27 @@ public class VisualController : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private CardUnit[] cardsUI = new CardUnit[5];
     [SerializeField] private CardTooltipController cardTooltip;
-    [SerializeField] private CheckBattleController checkBattle;
+    [SerializeField] private SO_CardTemplate cardTemplate;
     private GameController gameController;
     private List<Card> playerHand;
     private int mouseSelection = 0;
 
-    [SerializeField] private Sprite backgroundFire, backgroundIce, backgroundWater, backgroundNone;
-    [SerializeField] private Sprite iconFire, iconIce, iconWater;
-
     //Player identifier, 0 or 1
     [HideInInspector] public int playerId;
 
-    void Start(){
-        Invoke(nameof(StartFront), 0.5f);
+    //Get StartGame by backend event
+    void OnEnable(){
+        try{
+            GameObject.FindObjectOfType<GameEvents>().StartGame += StartGame;
+        }catch{}
     }
-    void StartFront(){
+    void OnDisable(){
+        try{
+            GameEvents.Singleton.StartGame += StartGame;
+        }catch{}
+    }
+
+    void StartGame(){
         //Get GameController reference
         try{
             gameController = GameController.Singleton;
@@ -98,12 +104,8 @@ public class VisualController : MonoBehaviour
                 cardsUI[i].text.text = playerHand[i].text;
                 cardsUI[i].image.sprite = playerHand[i].image;
 
-                cardsUI[i].background.sprite = playerHand[i].type == CardType.fire ? backgroundFire :
-                                                playerHand[i].type == CardType.ice ? backgroundIce :
-                                                playerHand[i].type == CardType.water ? backgroundWater : backgroundNone;
-                cardsUI[i].type.sprite = playerHand[i].type == CardType.fire ? iconFire :
-                                            playerHand[i].type == CardType.ice ? iconIce :
-                                            playerHand[i].type == CardType.water ? iconWater : null;
+                cardsUI[i].background.sprite = cardTemplate.CardTemplates.FirstOrDefault(t => t.type == playerHand[i].type).cardTemplate ?? null;
+                cardsUI[i].type.sprite = cardTemplate.CardTemplates.FirstOrDefault(t => t.type == playerHand[i].type).cardIcon ?? null;
 
             }
         }

@@ -35,7 +35,7 @@ public class GameController : MonoBehaviour
     [HideInInspector] public List<Card>[] playerHand = new List<Card>[2];
 
     //Current turn selected card
-    private Card?[] selectedCard = new Card[2]; 
+    [HideInInspector] public Card[] selectedCard = new Card[2]; 
     private Player winner = Player.none;
 
 
@@ -68,6 +68,11 @@ public class GameController : MonoBehaviour
         for(int i = 0; i < 5; i++){
             AddCard(0);
             AddCard(1);
+        }
+        
+        //Call Start Game Event if Event Handler exists
+        if(GameEvents.Singleton != null){
+            GameEvents.Singleton.StartGame();
         }
 
     }

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class GameStateMachine : MonoBehaviour
 {
+    private GameEvents gameEvents;
     private GameController gameController;
 
     void Start(){
@@ -14,6 +15,15 @@ public class GameStateMachine : MonoBehaviour
         }catch(System.Exception ex){
             Debug.Log(ex);
         }
+    }
+
+    //Event Handlers
+    void OnEnable(){
+        GameObject.FindObjectOfType<GameEvents>().BattlingStart += BattingTurnStart;
+    }
+
+    void OnDisable(){
+        GameEvents.Singleton.BattlingStart -= BattingTurnStart;
     }
 
     //Update State and check if it's a state transiftion
