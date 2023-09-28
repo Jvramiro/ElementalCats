@@ -38,7 +38,11 @@ public class GameController : MonoBehaviour
     private Card?[] selectedCard = new Card[2]; 
     private Player winner = Player.none;
 
+
+    //Offline and Multiplayer region
+    private GameAI gameAI = new GameAI();
     private bool isMultiplayer = false;
+    private int[] lastType = new int[2]{ -1, -1 };
 
     void Start(){
         if(!isMultiplayer){
@@ -143,6 +147,12 @@ public class GameController : MonoBehaviour
         selectedCard[playerId] = playerHand[playerId][handCardId];
         selectedCard[playerId].handCardId = handCardId;
 
+        lastType[playerId] = (int)selectedCard[playerId].type;
+
+        if(!isMultiplayer){
+            Call_IA();
+        }
+
     }
 
     int GetTurnPointOwner(){
@@ -177,7 +187,15 @@ public class GameController : MonoBehaviour
         selectedCard[1] = null;
     }
 
-    public void CheckRoundPoint(){
+    void Call_IA(){
+        gameAI.AI_TurnHandler(
+            playerPoint[1], playerPoint[0],
+            playerHand[1].Select(c => (int)c.type).ToArray(),
+            playerHand[1].Select(c => c.value).ToArray()
+        );
+    }
+
+    public void FinishRound(){
 
         int pointOwner = GetTurnPointOwner();
 
@@ -187,6 +205,10 @@ public class GameController : MonoBehaviour
         }
 
         playerPoint[pointOwner]++;
+
+        if(!isMultiplayer){
+            gameAI.RoundHandler(pointOwner, lastType[0], lastType[1]);
+        }
 
     }
 

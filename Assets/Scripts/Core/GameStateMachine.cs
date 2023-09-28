@@ -50,7 +50,7 @@ public class GameStateMachine : MonoBehaviour
     }
 
     void BattingTurnEnd(){
-        gameController.CheckRoundPoint();
+        gameController.FinishRound();
         gameController.ResetSelectedCards();
 
         //If a player has more than 2 points and it's not tied, the player wins
