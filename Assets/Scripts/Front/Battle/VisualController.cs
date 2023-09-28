@@ -27,29 +27,26 @@ public class VisualController : MonoBehaviour
     [SerializeField] private SO_CardTemplate cardTemplate;
     private GameController gameController;
     private List<Card> playerHand;
-    private int mouseSelection = 0;
+    private int mouseSelection = 0, lastSelection = 0;
 
     //Player identifier, 0 or 1
     [HideInInspector] public int playerId;
 
     //Get StartGame by backend event
     void OnEnable(){
-        try{
-            GameObject.FindObjectOfType<GameEvents>().StartGame += StartGame;
-        }catch{}
+        if(GameObject.FindObjectOfType<GameEvents>() != null){ GameObject.FindObjectOfType<GameEvents>().StartGame += StartGame; }
     }
     void OnDisable(){
-        try{
-            GameEvents.Singleton.StartGame += StartGame;
-        }catch{}
+        if(GameEvents.Singleton != null){ GameEvents.Singleton.StartGame -= StartGame; }
     }
 
     void StartGame(){
         //Get GameController reference
         try{
             gameController = GameController.Singleton;
-        }catch(System.Exception ex){
-            Debug.Log(ex);
+        }catch{
+            Debug.Log("GameController does not exist to manage the game");
+            return;
         }
 
         //Initializing the playerHand
@@ -65,7 +62,6 @@ public class VisualController : MonoBehaviour
         if(playerHand == null){ return; }
 
         CheckMouseSelection();
-        CheckHandUpdate();
     }
 
     void CheckMouseSelection(){
@@ -77,36 +73,31 @@ public class VisualController : MonoBehaviour
         animator.SetInteger("mouseSelection", mouseSelection);
     }
 
-    void CheckHandUpdate(){
-        if(playerHand != gameController.playerHand[0]){
-            UpdateHand();
-        }
-    }
-
-    void UpdateHand(){
+    public void UpdateHand(int handCardId){
         if(animator.GetCurrentAnimatorStateInfo(0).IsTag("HandUpdate") || animator.GetCurrentAnimatorStateInfo(0).IsName("HandStart")){ return; }
 
-        for(int i = 0; i < gameController.playerHand.Count(); i++){
-            if(playerHand[i] != gameController.playerHand[0][i]){
-                animator.Play($"HandUpdate_0{i}");
-                playerHand[i] = gameController.playerHand[0][i];
-            }
-        }
+        animator.Play($"HandUpdate_0{handCardId}");
+        playerHand = gameController.playerHand[0].ToList();
 
     }
 
     public void UpdateCardsUI(){
 
-        for(int i = 0; i < cardsUI.Length; i++){
-            if(i <= playerHand.Count){
+        var getCards = gameController.playerHand[0];
 
-                cardsUI[i].title.text = playerHand[i].title;
-                cardsUI[i].text.text = playerHand[i].text;
-                cardsUI[i].image.sprite = playerHand[i].image;
+        for(int i = 0; i < getCards.Count; i++){
+            if(i <= getCards.Count){
 
-                cardsUI[i].background.sprite = cardTemplate.CardTemplates.FirstOrDefault(t => t.type == playerHand[i].type).cardTemplate ?? null;
-                cardsUI[i].type.sprite = cardTemplate.CardTemplates.FirstOrDefault(t => t.type == playerHand[i].type).cardIcon ?? null;
+                cardsUI[i].title.text = getCards[i].title;
+                cardsUI[i].text.text = getCards[i].text;
+                cardsUI[i].image.sprite = getCards[i].image;
 
+                cardsUI[i].background.sprite = cardTemplate.CardTemplates.FirstOrDefault(t => t.type == getCards[i].type).cardTemplate ?? null;
+                cardsUI[i].type.sprite = cardTemplate.CardTemplates.FirstOrDefault(t => t.type == getCards[i].type).cardIcon ?? null;
+
+            }
+            else{
+                Debug.Log("uai");
             }
         }
     }
@@ -120,6 +111,20 @@ public class VisualController : MonoBehaviour
 
     public void ResetTooltipCardUI(){
         cardTooltip.ResetTooltipCardUI();
+    }
+
+    public Vector2 points;
+    public List<Card> playerCards, rivalCards;
+    void Update(){
+        points = new Vector2(gameController.playerPoint[0], gameController.playerPoint[1]);
+        playerCards = gameController.playerHand[0];
+        rivalCards = gameController.playerHand[1];
+
+        if(Input.GetKeyDown(KeyCode.G)){
+            foreach(var current in playerHand){
+                Debug.Log(current.title);
+            }
+        }
     }
 
 }

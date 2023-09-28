@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameStateMachine : MonoBehaviour
@@ -19,13 +20,25 @@ public class GameStateMachine : MonoBehaviour
 
     //Event Handlers
     void OnEnable(){
+        if(GameObject.FindObjectOfType<GameEvents>() == null){ return; }
+
         GameObject.FindObjectOfType<GameEvents>().BattlingStart += CallBattleState;
+        GameObject.FindObjectOfType<GameEvents>().FinishGame += CallFinishedState;
     }
     void OnDisable(){
+        if(GameEvents.Singleton == null){ return; }
+
         GameEvents.Singleton.BattlingStart -= CallBattleState;
+        GameEvents.Singleton.FinishGame -= CallFinishedState;
     }
     void CallBattleState(){
         UpdateState(State.battling);
+    }
+    void CallPlayersTurnState(){
+        UpdateState(State.playersTurn);
+    }
+    void CallFinishedState(){
+        UpdateState(State.finished);
     }
 
     //Update State and check if it's a state transiftion
@@ -39,38 +52,41 @@ public class GameStateMachine : MonoBehaviour
         if(nextState != currentState){
 
             switch(nextState){
-                case State.playersTurn : PlayersTurnStart();
+                case State.playersTurn : PlayersTurnState_Start();
                 break;
-                case State.battling : BattingTurnStart();
+                case State.battling : BattingState_Start();
+                break;
+            }
+
+            switch(currentState){
+                case State.battling : BattingState_End();
                 break;
             }
 
         }
 
+
         gameController.state = nextState;
 
     }
 
-    void PlayersTurnStart(){
-        gameController.PlayersDrawCards();
+    void PlayersTurnState_Start(){
+        
     }
 
-    void BattingTurnStart(){
+    void BattingState_Start(){
         //Invoke the end of this state after specified time
-        gameController.RemoveSelectedCards();
-        Invoke(nameof(BattingTurnEnd), gameController.idleGameTime);
+        gameController.PlayersDrawCards();
+
+        Invoke(nameof(CallPlayersTurnState), gameController.idleGameTime);
     }
 
-    void BattingTurnEnd(){
+    void BattingState_End(){
         gameController.FinishRound();
         gameController.ResetSelectedCards();
 
-        //If a player has more than 2 points and it's not tied, the player wins
-        //If the sum of player points are greater than 3 so one of the players has more than 2 points
-        if(gameController.playerPoint[0] + gameController.playerPoint[1] > 3 && gameController.playerPoint[0] != gameController.playerPoint[1]){
-            int winnedId = gameController.playerPoint[0] > gameController.playerPoint[1] ? 0 : 1;
-            gameController.FinishGame(winnedId);
-            UpdateState(State.finished);
-        }
+        //Call the function that check if the game is finished
+        gameController.CheckFinishGame();
     }
+
 }

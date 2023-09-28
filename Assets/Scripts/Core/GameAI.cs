@@ -63,8 +63,8 @@ public class GameAI : MonoBehaviour, IGameAI
             nextCard = filteredByType[Random.Range(0, filteredByType.Count())];
         }
 
-        string debugMessage = $"AI decides that the type {typeHint} is the better action";
-        debugMessage += typeHint != nextCard ? $", but had to choose {nextCard}" : "";
+        string debugMessage = $"AI decides that the {(CardType)typeHint} type is the better action";
+        debugMessage += typeHint != nextCard ? ", but had to choose another" : "";
         debugMessage += decideByValue ? $" and played by the higher value" : " and played without check card value";
         Debug.Log(debugMessage);
         AI_Input(nextCard);

@@ -22,7 +22,7 @@ public class GameController : MonoBehaviour
     #endregion
 
     [Tooltip("Idle time to show the cards awaiting to next turn")]
-    public float idleGameTime = 5f;
+    public float idleGameTime = 4f;
     [SerializeField] private SO_Card cardData;
     //Deck for both players
     private List<Card>[] deck = new List<Card>[2];
@@ -35,7 +35,7 @@ public class GameController : MonoBehaviour
     [HideInInspector] public List<Card>[] playerHand = new List<Card>[2];
 
     //Current turn selected card
-    [HideInInspector] public Card[] selectedCard = new Card[2]; 
+    [HideInInspector] public Card[] selectedCard = new Card[2];
     private bool[] cardSelected = new bool[2];
     private Player winner = Player.none;
 
@@ -74,9 +74,7 @@ public class GameController : MonoBehaviour
         }
         
         //Call Start Game Event if Event Handler exists
-        if(GameEvents.Singleton != null){
-            GameEvents.Singleton.StartGame();
-        }
+        if(GameEvents.Singleton != null){ GameEvents.Singleton.StartGame(); }
 
     }
 
@@ -87,6 +85,8 @@ public class GameController : MonoBehaviour
     }
 
     void AddCard(int playerId){
+
+        //Debug.Log($"Player {playerId} is drawing a card");
 
         //Check if there's space to add one card, max hand length is 5
         if(playerHand[playerId].Count >= 5){
@@ -120,18 +120,14 @@ public class GameController : MonoBehaviour
 
     }
 
-    public void RemoveSelectedCards(){
-        // --------> To improve later
-        playerHand[0].RemoveAt(selectedCard[0].handCardId);
-        playerHand[1].RemoveAt(selectedCard[1].handCardId);
-    }
-
     public void PlayersDrawCards(){
         AddCard(0);
         AddCard(1);
     }
 
     public void PlayerAction(int playerId, int handCardId){
+
+        Debug.Log($"Player {playerId} wants to use the card {handCardId}: {playerHand[playerId][handCardId].title}");
 
         //Check if it's a correct player Id
         if(playerId != 0 && playerId != 1){
@@ -152,14 +148,16 @@ public class GameController : MonoBehaviour
         }
         
         //Get card info to selected card and remove from hand
-        selectedCard[playerId] = playerHand[playerId][handCardId];
+        selectedCard[playerId] = playerHand[playerId].ToList()[handCardId];
         selectedCard[playerId].handCardId = handCardId;
         cardSelected[playerId] = true;
         
         lastType[playerId] = (int)selectedCard[playerId].type;
 
-        CheckEndTurn();
+        RemoveCard(playerId, handCardId);
 
+        CheckEndTurn();
+        
         //Last Function Action
         if(!isMultiplayer && playerId == 0){
             Call_IA();
@@ -169,8 +167,8 @@ public class GameController : MonoBehaviour
 
     void CheckEndTurn(){
         if(cardSelected[0] && cardSelected[1]){
-            Debug.Log("Starting Round Battle");
             if(GameEvents.Singleton != null){
+                Debug.Log("Starting Round Battle");
                 GameEvents.Singleton.BattlingStart();
             }
             else{
@@ -239,7 +237,15 @@ public class GameController : MonoBehaviour
 
     }
 
-    public void FinishGame(int winnerId){
+    public void CheckFinishGame(){
+        if(playerPoint[0] != playerPoint[1] && (playerPoint[0] > 2 || playerPoint[1] > 2)){
+            FinishGame(playerPoint[0] > playerPoint[1] ? 0 : 1);
+        }
+    }
+
+    void FinishGame(int winnerId){
+        if(GameEvents.Singleton != null){ GameEvents.Singleton.FinishGame(); }
+
         winner = winnerId == 0 ? Player.playerOne : Player.playerTwo;
         Debug.Log($"Player {winnerId} wins");
     }
