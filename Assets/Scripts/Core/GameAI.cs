@@ -14,7 +14,7 @@ public class GameAI : MonoBehaviour, IGameAI
         }
     }
 
-    public void AI_TurnHandler(int currentPoints, int playerPoints, int[] cardTypes, int[] cardValues){
+    public void AI_TurnHandler(int[] cardTypes, int[] cardValues){
 
         //Set all parameters
         int typeHint = 0;

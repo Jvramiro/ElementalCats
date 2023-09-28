@@ -29,7 +29,7 @@ public class GameController : MonoBehaviour
     /*[HideInInspector]*/ public State state = State.awaiting;
 
     //Player Points, to increase each round and check if the player reached tree
-    [HideInInspector] public int[] playerPoint = new int[2];
+    [HideInInspector] public int[,] playerPoint = new int[2,3];
 
     //Card Ids of each player
     [HideInInspector] public List<Card>[] playerHand = new List<Card>[2];
@@ -63,7 +63,7 @@ public class GameController : MonoBehaviour
         //Reseting Selected Cards Array
         ResetSelectedCards();
         //Reseting Points
-        playerPoint = new int[2]{0,0};
+        playerPoint = new int[2,3]{ {0,0,0}, {0,0,0} };
         
         //Setting players turn
         state = State.playersTurn;
@@ -213,7 +213,6 @@ public class GameController : MonoBehaviour
 
     void Call_IA(){
         gameAI.AI_TurnHandler(
-            playerPoint[1], playerPoint[0],
             playerHand[1].Select(c => (int)c.type).ToArray(),
             playerHand[1].Select(c => c.value).ToArray()
         );
@@ -229,7 +228,7 @@ public class GameController : MonoBehaviour
             return;
         }
 
-        playerPoint[pointOwner]++;
+        playerPoint[pointOwner, lastType[pointOwner]]++;
 
         if(!isMultiplayer){
             gameAI.RoundHandler(pointOwner, lastType[0], lastType[1]);
@@ -238,8 +237,12 @@ public class GameController : MonoBehaviour
     }
 
     public void CheckFinishGame(){
-        if(playerPoint[0] != playerPoint[1] && (playerPoint[0] > 2 || playerPoint[1] > 2)){
-            FinishGame(playerPoint[0] > playerPoint[1] ? 0 : 1);
+        for(int i = 0; i < 2; i++){
+            for(int j = 0; j < 3; j++){
+                if(playerPoint[i,j] > 2 || (playerPoint[i,0] > 0 && playerPoint[i,1] > 0 && playerPoint[i,2] > 0) ){
+                    FinishGame(i);
+                }
+            }
         }
     }
 
