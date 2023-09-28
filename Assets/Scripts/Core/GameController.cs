@@ -38,8 +38,20 @@ public class GameController : MonoBehaviour
     private Card?[] selectedCard = new Card[2]; 
     private Player winner = Player.none;
 
+    private bool isMultiplayer = false;
+
+    void Start(){
+        if(!isMultiplayer){
+            StartGame();
+        }
+    }
 
     void StartGame(){
+        
+        //Initializing the variables to use
+        //Deck is initiated in ResetDecks
+        playerHand[0] = new List<Card>();
+        playerHand[1] = new List<Card>();
 
         //Setting the cards according SO
         ResetDecks();
@@ -49,12 +61,17 @@ public class GameController : MonoBehaviour
         //Setting players turn
         state = State.playersTurn;
 
+        for(int i = 0; i < 5; i++){
+            AddCard(0);
+            AddCard(1);
+        }
+
     }
 
     void ResetDecks(){
         deck = new List<Card>[2];
-        deck[0] = cardData.Cards;
-        deck[1] = cardData.Cards;
+        deck[0] = cardData.Cards.ToList();
+        deck[1] = cardData.Cards.ToList();
     }
 
     void AddCard(int playerId){
@@ -66,7 +83,7 @@ public class GameController : MonoBehaviour
         //Check if there's card in deck
         //Reseting de deck if there's no card
         if(deck[playerId].Count <= 0){
-            deck[playerId] = cardData.Cards;
+            deck[playerId] = cardData.Cards.ToList();
         }
 
         //Get a random card from deck
