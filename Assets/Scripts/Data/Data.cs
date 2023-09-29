@@ -35,5 +35,10 @@ namespace DataController{
         public static int GetProgress(){
             return PlayerPrefs.GetInt(keyString_Progress);
         }
+
+        public static void ResetData(){
+            ResetPoints();
+            ResetProgress();
+        }
     }
 }
