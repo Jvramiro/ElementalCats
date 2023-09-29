@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using TMPro;
+using DataController;
+using SceneControllerService;
 
 public class FinishGameController : MonoBehaviour
 {
@@ -20,11 +22,16 @@ public class FinishGameController : MonoBehaviour
 
     void FinishGame(){
         if(FinishUIAnim != null && GameController.Singleton != null){
+            if(GameController.Singleton.winner == Player.playerOne){ Data.AddPoints(1); }
             finishMessage.text = GameController.Singleton.winner == Player.playerTwo ? "you lose" : "you win";
             FinishUIAnim.Play("FinishUI");
         }
         else{
             Debug.Log("Missing parameters Finish Animation and GameController Singleton");
         }
+    }
+
+    public void ReturnScene(){
+       StartCoroutine(SceneController.LoadSceneAsync("MainScene"));
     }
 }

@@ -8,7 +8,7 @@ namespace DataController{
         private static string keyString_Points = "ECPoints";
         private static string keyString_Progress = "ECProgress";
 
-        public static void UpdatePoints(int quantity){
+        public static void AddPoints(int quantity){
             int getPointsData = PlayerPrefs.GetInt(keyString_Points);
             PlayerPrefs.SetInt(keyString_Points, getPointsData + quantity);
         }
