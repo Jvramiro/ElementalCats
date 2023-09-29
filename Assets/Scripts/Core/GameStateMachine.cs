@@ -23,22 +23,17 @@ public class GameStateMachine : MonoBehaviour
         if(GameObject.FindObjectOfType<GameEvents>() == null){ return; }
 
         GameObject.FindObjectOfType<GameEvents>().BattlingStart += CallBattleState;
-        GameObject.FindObjectOfType<GameEvents>().FinishGame += CallFinishedState;
     }
     void OnDisable(){
         if(GameEvents.Singleton == null){ return; }
 
         GameEvents.Singleton.BattlingStart -= CallBattleState;
-        GameEvents.Singleton.FinishGame -= CallFinishedState;
     }
     void CallBattleState(){
         UpdateState(State.battling);
     }
     void CallPlayersTurnState(){
         UpdateState(State.playersTurn);
-    }
-    void CallFinishedState(){
-        UpdateState(State.finished);
     }
 
     //Update State and check if it's a state transiftion
@@ -52,9 +47,9 @@ public class GameStateMachine : MonoBehaviour
         if(nextState != currentState){
 
             switch(nextState){
-                case State.playersTurn : PlayersTurnState_Start();
-                break;
                 case State.battling : BattingState_Start();
+                break;
+                case State.finished : FinishedState_Start();
                 break;
             }
 
@@ -70,8 +65,8 @@ public class GameStateMachine : MonoBehaviour
 
     }
 
-    void PlayersTurnState_Start(){
-        
+    void FinishedState_Start(){
+        //if(GameEvents.Singleton != null){ GameEvents.Singleton.FinishGame(); }
     }
 
     void BattingState_Start(){
@@ -84,8 +79,11 @@ public class GameStateMachine : MonoBehaviour
     void BattingState_End(){
         gameController.FinishRound();
 
-        //Call the function that check if the game is finished
-        gameController.CheckFinishGame();
+        //Check if the game is finished
+        if(gameController.winner != Player.none){
+            gameController.state = State.finished;
+            if(GameEvents.Singleton != null){ GameEvents.Singleton.FinishGame(); }
+        }
     }
 
 }

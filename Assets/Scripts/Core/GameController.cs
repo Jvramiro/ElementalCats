@@ -22,7 +22,7 @@ public class GameController : MonoBehaviour
     #endregion
 
     [Tooltip("Idle time to show the cards awaiting to next turn")]
-    public float idleGameTime = 3f;
+    public float idleGameTime = 2f;
     [SerializeField] private SO_Card cardData;
     //Deck for both players
     private List<Card>[] deck = new List<Card>[2];
@@ -37,7 +37,7 @@ public class GameController : MonoBehaviour
     //Current turn selected card
     [HideInInspector] public Card[] selectedCard = new Card[2];
     private bool[] cardSelected = new bool[2];
-    private Player winner = Player.none;
+    [HideInInspector] public Player winner = Player.none;
 
 
     //Offline and Multiplayer region
@@ -167,6 +167,7 @@ public class GameController : MonoBehaviour
     }
 
     void CheckEndTurn(){
+        
         if(cardSelected[0] && cardSelected[1]){
             if(GameEvents.Singleton != null){
                 Debug.Log("Starting Round Battle");
@@ -179,6 +180,10 @@ public class GameController : MonoBehaviour
     }
 
     int GetTurnPointOwner(){
+
+        if(selectedCard[0] == null || selectedCard[1] == null){
+            return -1;
+        }
 
         //If the both cards have the same element check the biggest value
         //If the both cards have the same value, return a invalid number to set tied turn
@@ -241,22 +246,28 @@ public class GameController : MonoBehaviour
             gameAI.RoundHandler(pointOwner, lastType[0], lastType[1]);
         }
 
+        CheckFinishGame();
 
     }
 
     public void CheckFinishGame(){
+
         for(int i = 0; i < 2; i++){
+            if(playerPoint[i,0] > 0 && playerPoint[i,1] > 0 && playerPoint[i,2] > 0){
+                FinishGame(i);
+                break;
+            }
             for(int j = 0; j < 3; j++){
-                if(playerPoint[i,j] > 2 || (playerPoint[i,0] > 0 && playerPoint[i,1] > 0 && playerPoint[i,2] > 0) ){
+                if(playerPoint[i,j] > 2){
                     FinishGame(i);
+                    break;
                 }
             }
         }
+
     }
 
     void FinishGame(int winnerId){
-        if(GameEvents.Singleton != null){ GameEvents.Singleton.FinishGame(); }
-
         winner = winnerId == 0 ? Player.playerOne : Player.playerTwo;
         Debug.Log($"Player {winnerId} wins");
     }
