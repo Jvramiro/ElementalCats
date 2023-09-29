@@ -97,9 +97,6 @@ public class VisualController : MonoBehaviour
                 cardsUI[i].type.sprite = cardTemplate.CardTemplates.FirstOrDefault(t => t.type == getCards[i].type).cardIcon ?? null;
 
             }
-            else{
-                Debug.Log("uai");
-            }
         }
     }
 
