@@ -22,7 +22,7 @@ public class GameController : MonoBehaviour
     #endregion
 
     [Tooltip("Idle time to show the cards awaiting to next turn")]
-    public float idleGameTime = 4f;
+    public float idleGameTime = 3f;
     [SerializeField] private SO_Card cardData;
     //Deck for both players
     private List<Card>[] deck = new List<Card>[2];
@@ -44,6 +44,7 @@ public class GameController : MonoBehaviour
     private IGameAI gameAI = new GameAI();
     private bool isMultiplayer = false;
     private int[] lastType = new int[2]{ -1, -1 };
+    [HideInInspector] public int lastRoundOwner = -1;
 
     void Start(){
         if(!isMultiplayer){
@@ -185,7 +186,7 @@ public class GameController : MonoBehaviour
             return selectedCard[0].value == selectedCard[1].value ? 3 : selectedCard[0].value > selectedCard[1].value ? 0 : 1;
         }
 
-        int toReturn = 0;
+        int toReturn = -1;
         //Checking the winner based on elements
         //Fire wins against ice
         //Ice wins against water
@@ -231,6 +232,8 @@ public class GameController : MonoBehaviour
         Debug.Log($"Player {pointOwner} wins this round");
 
         playerPoint[pointOwner, lastType[pointOwner]]++;
+
+        lastRoundOwner = pointOwner;
 
         if(GameEvents.Singleton != null){ GameEvents.Singleton.UpdatePoints(); }
 

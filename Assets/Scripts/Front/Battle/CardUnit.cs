@@ -13,6 +13,7 @@ public class CardUnit : MonoBehaviour
     public Image background;
     public Image image;
     public Image type;
+    public int typeId;
 
     public int canvasId;
     public bool selected;
