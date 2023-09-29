@@ -771,6 +771,7 @@ GameObject:
   m_Component:
   - component: {fileID: 347020139}
   - component: {fileID: 347020140}
+  - component: {fileID: 347020141}
   m_Layer: 5
   m_Name: FinishUI
   m_TagString: Untagged
@@ -822,6 +823,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &347020141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 347020138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c5d95d8309f8f740893405d7a628448, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  finishMessage: {fileID: 771594870}
+  FinishUIAnim: {fileID: 347020140}
 --- !u!1 &370466753
 GameObject:
   m_ObjectHideFlags: 0
@@ -2357,6 +2372,7 @@ MonoBehaviour:
     type: 0
     image: {fileID: 0}
     handCardId: 0
+  winner: 0
   lastRoundOwner: -1
 --- !u!4 &1167413840
 Transform:
