@@ -8,11 +8,15 @@ public class CardEvents : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [SerializeField] private CardUnit cardUnit;
 
     public void OnPointerEnter(PointerEventData eventData){
-        cardUnit.selected = true;
+        if(GameController.Singleton == null){ return; }
+        cardUnit.selected = GameController.Singleton.state == State.playersTurn;
     }
 
     public void OnPointerExit(PointerEventData eventData){
-        cardUnit.selected = false;
+        if(GameController.Singleton == null){ return; }
+        if(cardUnit.selected){
+            cardUnit.selected = false;
+        }
         VisualController.Singleton.ResetTooltipCardUI();
     }
 

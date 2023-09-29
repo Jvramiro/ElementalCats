@@ -352,6 +352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   opponentAnim: {fileID: 1084626084}
+  cameraMovement: {fileID: 519420033}
 --- !u!4 &193309889
 Transform:
   m_ObjectHideFlags: 0
@@ -1191,6 +1192,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bobFrequency: 1.5
   bobAmplitude: 0.2
+  shakeDuration: 0.3
+  shakeMagnitude: 0.05
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1984,6 +1987,7 @@ MonoBehaviour:
     type: 0
     image: {fileID: 0}
     handCardId: 0
+  lastRoundOwner: -1
 --- !u!4 &1167413840
 Transform:
   m_ObjectHideFlags: 0
