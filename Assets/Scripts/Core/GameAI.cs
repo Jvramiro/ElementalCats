@@ -21,13 +21,13 @@ public class GameAI : MonoBehaviour, IGameAI
         int selectedType = 0;
         int nextCard = 0;
         
-        //Simple logic that use the last card type to presume the next hint
+        //Simple logic that use the last player card type to presume the next hint
         //If the player has used the same card in the last two turns
         //the algorithm has a high chance of intervening by playing against this card's weakness
 
         if(playerTypeHistory.Count > 2){
             if(playerTypeHistory.ElementAt(playerTypeHistory.Count - 1) == playerTypeHistory.ElementAt(playerTypeHistory.Count - 2)){
-                typeHint = Random.Range(1,11) < 8 ? GetTypeWeakness(playerTypeHistory.Count) : Random.Range(0,3);
+                typeHint = Random.Range(1,11) < 8 ? GetWeakness(playerTypeHistory.Count) : Random.Range(0,3);
             }
         }
         //If there's a last card stored, the algorithm has a moderate chance of intervening
@@ -64,7 +64,7 @@ public class GameAI : MonoBehaviour, IGameAI
         }
 
         string debugMessage = $"AI decides that the {(CardType)typeHint} type is the better action";
-        debugMessage += typeHint != nextCard ? ", but had to choose another" : "";
+        debugMessage += typeHint != selectedType ? ", but had to choose another" : "";
         debugMessage += decideByValue ? $" and played by the higher value" : " and played without check card value";
         Debug.Log(debugMessage);
         AI_Input(nextCard);
@@ -75,7 +75,7 @@ public class GameAI : MonoBehaviour, IGameAI
         GameController.Singleton.PlayerAction(1, handCardId);
     }
 
-    int GetTypeWeakness(int typeId){
+    int GetWeakness(int typeId){
         return typeId == 0 ? 2 : typeId == 1 ? 0 : 1;
     }
 

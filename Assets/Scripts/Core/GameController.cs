@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DataController;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -41,7 +42,7 @@ public class GameController : MonoBehaviour
 
 
     //Offline and Multiplayer region
-    private IGameAI gameAI = new GameAI();
+    private IGameAI gameAI;
     private bool isMultiplayer = false;
     private int[] lastType = new int[2]{ -1, -1 };
     [HideInInspector] public int lastRoundOwner = -1;
@@ -73,6 +74,9 @@ public class GameController : MonoBehaviour
             AddCard(0);
             AddCard(1);
         }
+
+        //Setting IA
+        gameAI = Data.GetAILevel() == 0 ? new GameAI_Weak() : new GameAI();
         
         //Call Start Game Event if Event Handler exists
         if(GameEvents.Singleton != null){ GameEvents.Singleton.StartGame(); }

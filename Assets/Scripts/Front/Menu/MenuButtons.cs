@@ -24,9 +24,11 @@ public class MenuButtons : MonoBehaviour{
     }
 
     public void StartLevel_01(){
-        StartCoroutine(SceneController.LoadSceneAsync("GameScene"));
+        Data.SetAILevel(0);
+        StartCoroutine(SceneController.LoadSceneAsync("TutorialScene"));
     }
     public void StartLevel_02(){
+        Data.SetAILevel(1);
         StartCoroutine(SceneController.LoadSceneAsync("GameScene"));
     }
 }
