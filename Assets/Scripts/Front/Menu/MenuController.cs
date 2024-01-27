@@ -15,7 +15,6 @@ public class MenuController : MonoBehaviour
         }
         else{
             Singleton = this;
-            DontDestroyOnLoad(this.gameObject);
         }
     }
     #endregion

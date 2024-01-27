@@ -19,7 +19,7 @@ public class MenuButtons : MonoBehaviour{
     public void SettingsMenu(){
 
     }
-    public void Reset(){
+    public void ResetData(){
         Data.ResetData();
     }
 

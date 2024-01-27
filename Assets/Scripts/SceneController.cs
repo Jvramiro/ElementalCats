@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 namespace SceneControllerService{
     public class SceneController : MonoBehaviour{
         public static IEnumerator LoadSceneAsync(string sceneName){
-            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
 
             while (!asyncLoad.isDone){
                 yield return null;
